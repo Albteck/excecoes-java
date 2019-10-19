@@ -8,6 +8,7 @@ package modelo.entidades;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import modelo.excecoes.DominioDeExcecoes;
 
 /**
  *
@@ -23,7 +24,10 @@ public class Reservas {
     public Reservas(){
         
     }
-    public Reservas(Integer numeroQuarto, Date checkin, Date checkout){
+    public Reservas(Integer numeroQuarto, Date checkin, Date checkout)throws DominioDeExcecoes{
+        if(!checkout.after(checkin)){
+            throw new DominioDeExcecoes("A data do check-out deve ser superior a data do check-in");
+        }
         this.numeroQuarto=numeroQuarto;
         this.checkin=checkin;
         this.checkout=checkout;
@@ -64,17 +68,16 @@ public class Reservas {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
-    public String updateDates(Date checkIn, Date checkOut){
+    public void updateDates(Date checkIn, Date checkOut) throws DominioDeExcecoes{
         Date nova = new Date();
         if(checkIn.before(nova)||checkOut.before(nova)){
-            return "As datas da reserva para atualização devem ser futuras";
+            throw new DominioDeExcecoes("As datas da reserva para atualização devem ser futuras");
         }
         if(!checkOut.after(checkIn)){
-            return "A data do check-out deve ser superior a data do check-in";
+            throw new DominioDeExcecoes("A data do check-out deve ser superior a data do check-in");
         }  
         this.checkin=checkIn;
         this.checkout=checkOut;
-        return null;
     }
     @Override
     public String toString(){
