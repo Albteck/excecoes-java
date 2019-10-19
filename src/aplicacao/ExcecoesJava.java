@@ -44,20 +44,15 @@ public class ExcecoesJava {
             checkIn=sdf.parse(leia.next());
             System.out.print("Data de Check-Out(dd/MM/yyyy): ");
             checkOut=sdf.parse(leia.next());
-            
-            Date nova = new Date();
-            
-            if(checkIn.before(nova)||checkOut.before(nova)){
-                System.out.println("Erro na reserva: as datas da reserva para atualização devem ser futuras");
-            }else if(!checkOut.after(checkIn)){
-                System.out.println("Erro na reserva: A data do check-out deve ser superior a data do check-in");
+            String error = res.updateDates(checkIn, checkOut);
+            if(error != null){
+                System.out.println("Erro ao reservar: "+error);
             }else{
-                res.updateDates(checkIn, checkOut);
                 System.out.println("Reserva: "+res);
             }
         }
         
-        
+
         
         
         
